@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NetCore.Fundamentals.Security.Data.Repositories;
 using NetCore.Fundamentals.Security.Dtos;
 
 namespace NetCore.Fundamentals.Security.Client.Web.Controllers
 {
+    [AllowAnonymous]
     public class ConferenceController : Controller
     {
         private readonly IConferenceRepository _conferenceRepository;

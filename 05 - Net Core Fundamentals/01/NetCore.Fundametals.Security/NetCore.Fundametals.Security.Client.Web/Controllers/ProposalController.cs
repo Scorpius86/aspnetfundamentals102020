@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NetCore.Fundamentals.Security.Data.Repositories;
 using NetCore.Fundamentals.Security.Dtos;
 
 namespace NetCore.Fundamentals.Security.Client.Web.Controllers
 {
+    //[Authorize]
     public class ProposalController : Controller
     {
         private readonly IConferenceRepository _conferenceRepository;
@@ -19,6 +21,7 @@ namespace NetCore.Fundamentals.Security.Client.Web.Controllers
             this._proposalRepository = proposalRepo;
         }
 
+        //[Authorize]
         public async Task<IActionResult> Index(int conferenceId)
         {
             var conference = await _conferenceRepository.GetById(conferenceId);
