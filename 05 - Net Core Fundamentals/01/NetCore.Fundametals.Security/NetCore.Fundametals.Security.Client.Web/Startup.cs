@@ -2,12 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -29,44 +26,13 @@ namespace NetCore.Fundamentals.Security.Client.Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            //services.AddControllersWithViews();
-            services.AddControllersWithViews(o=>o.Filters.Add(new AuthorizeFilter()));
-
+            services.AddControllersWithViews();
             services.AddScoped<IConferenceRepository, ConferenceRepository>();
             services.AddScoped<IProposalRepository, ProposalRepository>();
             services.AddScoped<IAttendeeRepository, AttendeeRepository>();
-            services.AddScoped<IUserRepository, UserRepository>();
 
             services.AddDbContext<NetcoreFundametalsSecurityDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("NetCoreFundamentalsSecurityConnection")));
-
-            //services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-            //    .AddCookie();
-            ////.AddCookie(o=>o.LoginPath="/account/signin");
-
-            //services.AddAuthentication(o => {
-            //    o.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-            //    o.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
-            //})
-            //.AddCookie()
-            //.AddGoogle(o=>
-            //{
-            //    o.ClientId = Configuration["Google:ClientId"];
-            //    o.ClientSecret = Configuration["Google:ClientSecret"];
-            //});
-
-            services.AddAuthentication(o =>
-            {
-                o.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;             
-            })
-            .AddCookie()
-            .AddCookie(ExternalAuthenticationDefaults.AuthenticationScheme)
-            .AddGoogle(o =>
-            {
-                o.SignInScheme = ExternalAuthenticationDefaults.AuthenticationScheme;
-                o.ClientId = Configuration["Google:ClientId"];
-                o.ClientSecret = Configuration["Google:ClientSecret"];
-            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -87,7 +53,6 @@ namespace NetCore.Fundamentals.Security.Client.Web
 
             app.UseRouting();
 
-            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
